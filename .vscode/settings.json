@@ -1,0 +1,4 @@
+{
+  "pasteImage.path": "${currentFileNameWithoutExt}/",
+  "pasteImage.insertPattern": "{% asset_img ${imageFilePath} %}"
+}
