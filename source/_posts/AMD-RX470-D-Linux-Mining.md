@@ -13,7 +13,7 @@ tags: Linux
 ### 取得 VBIOS
 Polaris 系列显卡的 VBIOS 都是可以互刷的，前提是内存型号和大小一致，于是我们可以把 RX 470D 刷成 RX 470，解锁更高性能。
 
-在 https://www.techpowerup.com/vgabios/ 这个页面上搜索厂商和显卡型号，选一个和自己的显卡最接近的，我选择了[这个](https://www.techpowerup.com/vgabios/。187196/xfx-rx470-4096-160913)。注意核对显存厂商，自己的显卡的信息可以从 GPU-Z 取得，或手动 dump 原始 VBIOS 后查看。
+在 https://www.techpowerup.com/vgabios/ 这个页面上搜索厂商和显卡型号，选一个和自己的显卡最接近的，我选择了[这个](https://www.techpowerup.com/vgabios/187196/xfx-rx470-4096-160913)。注意核对显存厂商，自己的显卡的信息可以从 GPU-Z 取得，或手动 dump 原始 VBIOS 后查看。
 ```
 Limits
   TDP: 85 W
@@ -60,6 +60,15 @@ FORCE_PERF_LEVEL: manual
 FORCE_SCLK: 7
 ```
 
+## OpenCL
+Arch/Manjaro 系统中有三种 OpenCL Runtime：
+
+* `opencl-mesa` 最常用的开源驱动
+* `opencl-amd` 来自 AMD 的闭源驱动，从 Ubuntu deb 解包，可以从 AUR 获得
+* `rocm-opencl-runtime` ROCm 开源驱动，可以从 AUR 或者 arch4edu 获得
+
+三种驱动原理上可互相替换，但不同的挖矿软件可能存在各种兼容性问题，目前测试下来效果最好的是 `opencl-amd`，推荐使用。
+
 ## 挖矿
 推荐使用 [teamredminer](https://github.com/todxx/teamredminer)，提供了很多实用的功能，性能也很不错。矿池请自行选择。
 
@@ -76,7 +85,68 @@ FORCE_SCLK: 7
 
 可以使用 https://www.gate.io/ 和 https://www.666pool.cn/pool2/ 进行交易和挖矿。
 
+以下是个人的 Ergo 配置，加入了 API 和风扇控制相关的参数，控制风扇需要 root 权限。
 ```bash
 ./amdmemtweak -i 0 --ref 20
 ./teamredminer -a autolykos2 -o stratum+tcp://ergo.666pool.cn:9556 -u <ADDR>.rig0 -p x --fan_control=68 --watchdog_script --api_listen=127.0.0.1:4028 --dev_location=cn
+```
+
+可以把这个脚本用 systemd 启动，防止设备意外重启后不继续运行。
+
+## 监控
+对于各种有关参数，可以用 [sampler](https://github.com/sqshq/sampler) 在命令行进行监控。
+
+```yaml
+# sampler.yml
+runcharts:
+  - title: Ergo Balance
+    position: [[0, 12], [40, 20]]
+    rate-ms: 60000
+    legend:
+        enabled: true
+        details: true
+    scale: 10
+    items:
+      - label: ERG
+        sample: curl https://www.666pool.cn/pool2/main/ERGO/<ADDR>
+            -ks | sed -n 438p | awk '{print $1}'
+  - title: Ergo Rate
+    position: [[40, 12], [40, 20]]
+    rate-ms: 5000
+    legend:
+        enabled: true
+        details: true
+    scale: 2
+    items:
+      - label: Ergo (kH/s)
+        sample: "echo '{\"command\": \"summary\"}' | nc 127.0.0.1 4028 | jq '.SUMMARY[0].\"KHS 30s\"'"
+  - title: Temps
+    position: [[0, 0], [80, 12]]
+    rate-ms: 1000
+    legend:
+        enabled: true
+        details: true
+    scale: 2
+    items:
+      - label: GPU
+        sample: sensors -j amdgpu-pci-2d00 | jq '."amdgpu-pci-2d00".edge.temp1_input'
+      - label: CPU
+        sample: "sensors -j nct6797-isa-0a20 | jq '.\"nct6797-isa-0a20\".\"SMBUSMASTER 0\".temp7_input'"
+            
+  - title: Fans
+    rate-ms: 1000
+    legend:
+        enabled: true
+        details: true
+    scale: 2
+    items:
+      - label: GPU
+        sample: sensors -j amdgpu-pci-2d00 | jq '."amdgpu-pci-2d00".fan1.fan1_input'
+      - label: CPU
+        sample: sensors -j nct6797-isa-0a20 | jq '."nct6797-isa-0a20".fan2.fan2_input'
+textboxes:
+  - title: Ergo Accepted
+    position: [[0, 32], [80, 8]]
+    rate-ms: 10000
+    sample: "echo '{\"command\": \"summary\"}' | nc 127.0.0.1 4028 | jq '.SUMMARY[0].Accepted'"
 ```
