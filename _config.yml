@@ -50,9 +50,11 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
-# marked:
-#   gfm: true
-#   breaks: false
+marked:
+  gfm: true
+  breaks: false
+  prependRoot: true
+  postAsset: true
 prismjs:
   enable: false
   preprocess: true

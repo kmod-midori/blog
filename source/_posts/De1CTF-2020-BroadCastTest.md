@@ -4,7 +4,6 @@ date: 2020-05-04 14:06:57
 tags: CTF
 categories:
 - CTF
-- Mobile
 ---
 用`dex2jar`把`classes2.dex`转换成jar，然后用JD-GUI打开（感谢队内师傅的提醒，也可以直接使用 `jadx-gui` 来查看，更加方便），可以看到一个Activity和三个Receiver。（PS：这么小一个应用居然还要multidex，真实迷惑行为）
 {% asset_img 2020-05-04-14-15-48.png %}
@@ -32,7 +31,7 @@ categories:
     </intent-filter>
 </activity>
 ```
-三个接收器的具体代码将不放了，总之流程如下：
+三个接收器的具体代码就不放了，总之流程如下：
 * `Receiver1` 接收来自其他应用的定向广播，将其中以base64编码的bundle解码后，和当前id一起发送给`Receiver2`,这里*没有发生反序列化*
 * `Recevier2` 对该bundle进行反序列化，检查`command`项是否存在，而且其值不能是`getflag`。检查通过后，将该bundle*再次序列化*，发送到`Receiver3`
 * `Receiver3` 对该bundle再次进行反序列化，检查`command`项是否存在，而且其值必须是`getflag`。检查通过后，输出flag
@@ -43,7 +42,7 @@ categories:
 * [国外安全人员对这些漏洞的分析](https://habr.com/en/company/drweb/blog/457610/)
 * [Google CTS（设备兼容性测试）中有关这一系列漏洞的测试](https://android.googlesource.com/platform/cts/+/444017e123fac55fba3293bf11cd6fa6e6bffa8b/hostsidetests/securitybulletin/test-apps/launchanywhere/src/com/android/security/cts/launchanywhere/CVE_2017_13289.java)
 
-基本上可以确认我们需要复现的漏洞就是这些。
+基本上可以确认我们需要复现的漏洞就是这个了。
 
 要想对漏洞进行复现，首先我们要对 `Bundle` 和 `Parcel` 有一定的了解。
 
