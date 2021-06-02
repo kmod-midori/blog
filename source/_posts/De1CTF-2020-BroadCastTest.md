@@ -5,6 +5,10 @@ tags: CTF
 categories:
 - CTF
 ---
+一道 Android Pwn 题目，涉及到对 CVE-2017-13289 的利用，`Bundle` 序列化（`Receiver` 真好玩）。
+
+<!-- more -->
+
 用`dex2jar`把`classes2.dex`转换成jar，然后用JD-GUI打开（感谢队内师傅的提醒，也可以直接使用 `jadx-gui` 来查看，更加方便），可以看到一个Activity和三个Receiver。（PS：这么小一个应用居然还要multidex，真实迷惑行为）
 {% asset_img 2020-05-04-14-15-48.png %}
 同时用`apktool`解码XML文件，得到如下配置，只有第一个Receiver可以被我们直接使用。
