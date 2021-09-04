@@ -113,4 +113,11 @@ Hosts 也可使用上述的 Bind Mount 方式直接覆盖（因为这个文件�
 # 增加新命令 - Hooking
 背景知识：[Correct usage of `LD_PRELOAD` for hooking `libc` functions](https://tbrindus.ca/correct-ld-preload-hooking-libc/)
 
+原版主控程序的远程命令接口中缺少一些比较有用的接口，比如：
+* 音量获取与调整
+* 音频播放状态相关接口（播放、暂停、停止、进度等）
+* 在屏幕上显示文字
+
+这里使用 `LD_PRELOAD` 的方式，对分发命令的函数进行劫持，将这些接口强行加入主程序中。
+
 TODO
