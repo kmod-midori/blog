@@ -210,7 +210,7 @@ widgets:
     type: links
     # Names and URLs of the sites
     links:
-      VtyberMusic: "https://vtbmusic.com/"
+      VtuberMusic: "https://vtbmusic.com/"
   # Categories widget configurations
   - # Where should the widget be placed, left sidebar or right sidebar
     position: left
