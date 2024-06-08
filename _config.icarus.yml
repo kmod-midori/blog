@@ -75,16 +75,16 @@ widgets:
   - position: left
     type: profile
     author: 加大号的猫
-    author_title: Harry Cheng
+    author_title: Midori Kochiya
     avatar: images/avatar.jpg
     avatar_rounded: true
     social_links:
       Github:
         icon: fab fa-github
-        url: https://github.com/chengyuhui
+        url: https://github.com/kmod-midori
       Twitter:
         icon: fab fa-twitter
-        url: https://twitter.com/htdocscat
+        url: https://twitter.com/enp39s0
       RSS:
         icon: fas fa-rss
         url: /

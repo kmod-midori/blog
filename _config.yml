@@ -4,10 +4,10 @@
 
 # Site
 title: '/dev/nvme0n1'
-subtitle: 'What is this?'
-description: ''
+subtitle: ''
+description: 'Probably another device on my PCIe bus.'
 keywords:
-author: Harry Cheng
+author: Midori Kochiya
 language: zh-CN
 timezone: 'Asia/Shanghai'
 
