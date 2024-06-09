@@ -5,6 +5,7 @@ tags:
   - Reverse
 categories:
   - Reverse
+toc: true
 ---
 书接某位[可爱女大（本文中的🐱）的上回](https://www.neko.ink/2023/10/15/dump-il2cpp-executable-from-memory/)，在凌晨四点的一个Twitter Space里面，我们开始研究IL2Cpp的字符串这个大坑。
 

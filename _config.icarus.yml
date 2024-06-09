@@ -112,7 +112,7 @@ plugins:
   katex: false
   mathjax: false
   outdated_browser: false
-  progressbar: true
+  progressbar: false
 providers:
   cdn: jsdelivr
   fontcdn: google
