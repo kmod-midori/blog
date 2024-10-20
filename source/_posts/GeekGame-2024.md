@@ -433,17 +433,17 @@ if user == nil {
 题目给出了OAuth Connector的实现源码：https://github.com/autolab/Autolab/pull/2194
 
 在这个实现中，Autolab会在用户登录时使用邮箱去查找账号，如果没有查找到账号则创建一个新的。在首次使用OAuth登录的过程中，一闪而过了这样的界面：
-{% asset_img "Pasted image 20241017201748.png" }
+{% asset_img "Pasted image 20241017201748.png" %}
 在这个管理页面的“用户设置”栏目中，邮箱居然是可以修改的，于是现在的目标就是找到管理员账户对应的邮箱。
 
 进入系统，发现用户列表中只能看到当前用户（管理员并非该课程的教师），一番寻找后在页面底部的Contact Us页面中找到了一个邮箱地址：
-{% asset_img "Pasted image 20241017202018.png" }
+{% asset_img "Pasted image 20241017202018.png" %}
 将UAAA中的邮箱地址改为该地址，重新登录（如果不行的话重启一下环境），即可以管理员身份进入后台，flag2在`/admin/autolab_config`页面中。
 ### flag3 (first blood)
 此时需要在Autolab中实现任意文件读，或者最好是RCE。Autograder肯定会执行我们上传的代码，但是不动脑子也能想到大概率是在单独的容器或者虚拟机中进行，此路不通。
 
 又是一通乱点，在Edit assessment界面中发现可以上传Ruby脚本文件：
-{% asset_img "Pasted image 20241017202523.png" }
+{% asset_img "Pasted image 20241017202523.png" %}
 在Autolab源码中搜索Assessment Config，找到如下文档：
 * https://github.com/autolab/Autolab/blob/93248801b5e84465f8eb10334eef2e56d407ae0c/docs/lab.md?plain=1#L361
 * https://docs.autolabproject.com/lab-hooks/#lab-handout
