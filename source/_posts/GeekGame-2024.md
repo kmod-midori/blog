@@ -6,6 +6,10 @@ tags:
 categories: [CTF]
 toc: true
 ---
+原来大家都是这么过的.html
+
+<!-- more -->
+
 # Misc
 ## 熙熙攘攘我们的天才吧 `misc-sunshine`
 ### Magic Keyboard
